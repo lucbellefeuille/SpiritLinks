@@ -1,3 +1,5 @@
+![SpiritLinks Logo](https://github.com/lucbellefeuille/SpiritLinks/blob/main/spiritlinks_bottom_400.png)
+
 # SpiritLinks
 
 # Overview

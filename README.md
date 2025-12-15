@@ -1,193 +1,155 @@
 ![SpiritLinks Logo](https://github.com/lucbellefeuille/SpiritLinks/blob/main/spiritlinks_bottom_400.png)
 
-# SpiritLinks
+# SpiritLinks (Mod)
+**MMO-style “ghost run” death flow for Minecraft 1.12.2 (Forge).**  
+Die → become a ghost → follow a clear death marker back → revive safely.
 
-# Overview
-- SpiritLinks turns death into a guided “ghost run” inspired by World of Warcraft.
-- When players die, they become ghosts, see wayfinding to their corpse or a Spirit Healer, hear ambient ghost music, and can revive via tomb/corpse or by right-clicking a marked Healer NPC.
-- Includes gentle Healer roaming, mob repulsion fields, random on-screen whispers, center-screen revive prompts, and a built-in resource-pack mini server.
+> **Versioning note (important):**
+> - **v1.0.0 = Spigot plugin (legacy)**  
+> - **v1.1.0 and later = Forge mod** (this README is for the **MOD**)
 
-# Supported Platforms / Requirements
-- **Minecraft Server:** Spigot 1.12.2 (also tested on CatServer 1.12.2 modded forks)
-- **API:** Bukkit/Spigot API 1.12.2-R0.1-SNAPSHOT
+---
+
+## Why SpiritLinks?
+I wanted a death system that feels closer to an MMO:
+- Death should be a **recoverable journey**, not a permanent gear/XP loss.
+- No more losing your run to lava/despawn timers or chaotic recovery.
+- A consistent way for players to **return to safety when revived** and keep death/revive behavior centralized and predictable.
+
+SpiritLinks focuses on turning death into a guided “ghost run” where the player is clearly directed back to their death location and can recover without the usual Minecraft death frustration.
+
+---
+
+## What it does
+When you die:
+- You respawn as a **ghost** (visual effects + ghost-like movement).
+- A **death marker** shows you where you died (designed to stay readable from far away).
+- You follow the marker back and **revive** once you reach the correct location.
+
+The goal is simple: **death becomes a guided recovery loop**, not a punishment spiral.
+
+---
+
+## Supported platforms / requirements (MOD)
+- **Minecraft:** 1.12.2
+- **Mod loader:** Forge (1.12.2)
 - **Java:** Java 8 (1.8)
-- **Optional:** Vault (for money-based costs) + an economy plugin (EssentialsEco, CMI, etc.)
+- **Singleplayer:** Supported
+- **Multiplayer:** Supported on Forge servers (clients must have the mod too)
 
-# Installation
-**Download & Install**
-- Place spiritlinks-1.0.0.jar into /plugins/.
-- Start the server once to generate config.yml.
-- (Optional) Install Vault and a supported economy plugin if you want currency costs.
+> Looking for the old Spigot/Bukkit server plugin? That’s **SpiritLinks v1.0.0** (plugin).  
+> Everything **after v1.0.0** is the **Forge mod**.
 
-# Resource Pack (Built-In Server)
-- The plugin can serve a small zip containing the ghost music and healer voice line.
-- Configure under resourcePack.* (host, port, path, and publicHost).
-- Clients will be prompted automatically if autoPushToPlayers: true.
+---
 
-# Quick Start (Admin)
-- Set the Cemetery (revive point)
-- **Run:** /spirit setcemetery at the desired location.
-- Policy is controlled by respawnPolicy:
-- same_world (default) → cemetery used only if in the same world as death.
-- always_cemetery → always respawn at the cemetery.
-- Mark a Spirit Healer
-- Sneak + right-click an entity with the configured item (default: WOOD_SPADE).
-- Or spawn one: /spirit spawnhealer <giant|golem|guardian|villager|polar_bear> [Name…]
-- Remove mark on a healer by sneaking with the item again or /spirit removehealer while looking at it.
+## Installation (Forge Mod)
+### Client (singleplayer / to join a modded server)
+1. Install **Minecraft Forge 1.12.2**
+2. Download the SpiritLinks **mod** `.jar` from the Releases page
+3. Put it in:
+   - `minecraft/mods/`
+4. Launch Minecraft
 
-# Test the Flow
-- Die, respawn as a ghost, follow the action bar/boss bar to the tomb or the healer.
-- Near your corpse (within 10 blocks), left/right click anywhere to revive.
-- At a Healer, right-click to revive (with configurable costs).
+### Dedicated server (Forge)
+1. Set up a **Forge 1.12.2** server
+2. Put the SpiritLinks **mod** `.jar` in:
+   - `server/mods/`
+3. Restart the server
+4. Make sure players use the **same mod version** on their clients
 
-# Player Experience
+---
 
-# Ghost State**
-- **Movement:** Flight enabled; noclip-like behavior; safe world clamping.
-- **Visuals:** INVISIBILITY (hide body), GLOWING outline, NIGHT_VISION “milky” hue (auto-refreshed).
-- **Audio:** Optional ambient loop using resource-pack sound key or vanilla fallback.
-- **Protection:** Ghosts cannot be damaged or pick up items.
+## How to play
+### After death
+- You enter **ghost mode**.
+- The mod displays a **death marker** to guide you back to where you died.
 
-# Wayfinding
-- **Action Bar:** Directional target name + distance.
-- **Boss Bar:** Configurable title, color, segmented style, distance progress.
-- **Breadcrumbs:** Particle trail steps from player toward the current target.
-- **Target Choice:** wayfinding.prefer = healer_only | cemetery_only | healer_then_cemetery.
+### Revival
+- Follow the marker until you reach your death location.
+- Revive (exact interaction depends on version/config — see below).
 
-# On-Screen Guidance
-- **Ghost Whisper (random):** Large center title every N seconds with helpful text.
-- Revive Prompts (persistent while in range):
-- Near corpse (≤ 10 blocks): “You can revive here — left or right click anywhere.”
-- Near healer (≤ configurable range): “You can revive at the Spirit Healer — right-click the healer.”
+---
 
-# Revival Options
-- **Near Death Point** (failsafe): Click within 10 blocks; optionally break nearby gravestone/tomb blocks before reviving so drops spill.
-- **Spirit Healer:** Right-click to revive with costs that can scale over a time window.
+## Quick start (admin)
+### 1) Set a cemetery (revive hub)
+Stand where you want the revive point, then:
+- `/spirit setcemetery`
 
-# Features (Highlights)
-- Healer NPCs
-- Mark any living entity as a Spirit Healer (sneak + right-click with item).
-- Optional spawn helper command; auto-naming & glow; villagers set to PRIEST/CLERIC.
-- Gentle Roam: Randomized pacing within a 5-block leash around center (cemetery by default).
-- Repel Field: Periodic pushback of mobs/animals/players (configurable targets), with optional “hard ring” snap near the boundary.
+Control how it’s used with:
+- `respawnPolicy: same_world` (default) → cemetery used only if death was in same world  
+- `respawnPolicy: always_cemetery` → always use the cemetery
 
-# Costs & Scaling
-- Flat cost for /spirit res (XP or money).
-- Healer scaling within a time window (scalingCosts.*):
-- XP and/or money ramps per recent res (caps supported).
-- Optional durability damage to armor (and hands) starting at a threshold res count.
-- Vault is only required for money mode; XP mode works standalone.
+### 2) Create a Spirit Healer
+You can mark an existing entity:
+- **Sneak + right-click** the entity with the configured item (default: `WOOD_SPADE`)
 
-# Resource Pack Mini-Server
-- Serves a compact zip with: ghost loop, healer voice line, and pack metadata.
-- Allows external file overrides on disk, or uses embedded assets.
-- Auto-push prompt + friendly hints if players block server resource packs.
+Or spawn one:
+- `/spirit spawnhealer <giant|golem|guardian|villager|polar_bear> [Name…]`
 
-# Compatibility Shims
-- Back-compat public methods (isGhostPublic, getGhostData, resurrectAtPublic) to integrate with older helper classes (e.g., RescueNearDeath).
+Remove/unmark:
+- Sneak + right-click again with the item, or
+- `/spirit removehealer` while looking at it
 
-# Commands
-- /spirit res — Revive at cemetery (observes cooldown/cost).
-- /spirit status — Show ghost status and nearest healer/cemetery distance.
-- /spirit setcemetery — Set cemetery at your current position.
-- /spirit clearcemetery — Clear the stored cemetery.
-- /spirit spawnhealer <type> [Custom Name…] — Spawn and mark a Spirit Healer.
-- /spirit removehealer — Unmark & remove the targeted healer entity.
+### 3) Test the flow
+- Die → respawn as a ghost
+- Follow the **action bar / boss bar / breadcrumbs**
+- Revive:
+  - Near corpse (≤ 10 blocks): **left/right click anywhere**
+  - At healer: **right-click the healer** (costs optional)
 
-# Aliases
-- /ghost
-- /reclaim
+---
 
-# Permissions
-- spiritlinks.use
-- Use basic features: /spirit res, /spirit status.
-- Default: true
+## Player experience
+### Ghost state
+- **Movement:** Flight enabled; noclip-like behavior; safe world clamping
+- **Visuals:** INVISIBILITY, GLOWING outline, NIGHT_VISION “milky” hue (auto-refreshed)
+- **Audio:** Optional ambient ghost loop
+- **Protection:** Ghosts can’t be damaged and can’t pick up items
 
-- spiritlinks.admin
-- Admin actions: set/clear cemetery, spawn/remove healer.
-- Default: op
+### Wayfinding
+- **Action Bar:** Target name + distance + direction guidance
+- **Boss Bar:** Configurable title, color, segmented style, and distance progress
+- **Breadcrumbs:** Particle trail stepping toward the current target
+- **Target selection:**  
+  `wayfinding.prefer = healer_only | cemetery_only | healer_then_cemetery`
 
-- Optional Granular Nodes
-- spiritlinks.markhealer — Toggle Spirit Healer with the shovel. (Default: op)
-- spiritlinks.spawnhealer — Use /spirit spawnhealer. (Default: op)
-- spiritlinks.removehealer — Use /spirit removehealer. (Default: op)
+### On-screen guidance
+- **Ghost whispers:** Random center-screen titles every N seconds
+- **Revive prompts:** Persist while in range
+  - Near corpse: “You can revive here — left or right click anywhere.”
+  - Near healer: “You can revive at the Spirit Healer — right-click the healer.”
 
-# Configuration (Key Sections)
-- Respawn Policy
-- respawnPolicy: "same_world" | "always_cemetery"
-- Healer Marking
-- healer.clickItem: WOOD_SPADE
-- healer.requireSneakToMark: true
-- healer.requireFunds: false
+### Revival options
+- **Near death point (failsafe):** Click within 10 blocks  
+- **Spirit Healer:** Right-click to revive  
+  Optional: XP cost and Durability loss and scaling within a time window
 
-# Scaling Costs
-- scalingCosts.windowSeconds: 900
-- scalingCosts.xp.enabled/base/step/max
-- scalingCosts.money.enabled/base/step/max
-- scalingCosts.durability.enabled/triggerFromCount/damagePerPiece
+---
 
-# Ghost Visuals & Hue
-- ghost.allowFlight: true
-- ghost.useInvisibility: true
-- ghost.reapplyHueEverySeconds: 30
+## Feature highlights
+### Spirit Healers (NPCs)
+- Mark almost any living entity as a healer
+- Optional spawn helper command
+- Auto-naming & glow
+- Villagers set to PRIEST/CLERIC
 
-# Effects & Breadcrumbs
-- effects.nightVision: true
-- effects.ghostParticles: true
-- wayfinding.actionBar.enabled/everyTicks/format
-- wayfinding.bossBar.enabled/color/style/maxDistance/title
-- wayfinding.breadcrumb.enabled/everyTicks/particle/step/maxPoints
+### Gentle roam
+- Random pacing within a small leash (default: around cemetery)
 
-# Healer Movement & Repel
-- healerRoam.enabled/center/radius/checkEveryTicks/maxYDrop
-- healerRepel.enabled/radius/checkEveryTicks/baseStrength/verticalBoost/hardBoundary/hardBoundaryFactor
-- healerRepel.affect.monsters/animals/villagers/golems/players
+### Repel field (hub protection)
+- Periodic pushback of mobs/animals/players (configurable targets)
+- Optional “hard ring” snap near the boundary
 
-# Ghost Whispers & Revive Prompts
-- ghostWhisper.enabled/minSeconds/maxSeconds/fadeIn/stay/fadeOut
-- reviveHints.enabled/checkEveryTicks/fadeIn/stay/fadeOut/healerRange
+### Costs & scaling (optional)
+- Flat revive cost (XP or money)
+- Scaling costs within `scalingCosts.windowSeconds`
+- Optional durability damage to armor/hands after a threshold
+- **Vault only required for money mode** (XP mode works standalone)
 
-# Near-Death Rescue (Click-to-Revive)
-- rescue.enabled: true
-- rescue.clickDistance: 10 (spherical; plugin enforces 10 blocks)
-- rescue.breakTombs: true + rescue.tombBreakRadius: 2
-- rescue.tombBlocks: [...] (best-effort material name matching on 1.12)
-- rescue.captureDrops/giveItemsAtRevive/restoreXP: true
+---
 
-# Resource Pack Server
-- resourcePack.enabled/host/port/path/publicHost/autoPushToPlayers
-- resourcePack.externalGhostOgg/externalHealerOgg/externalPackPng
-- music.enabled/volume/ghostLoopKey/healerClickKey/ghostLoopEveryTicks
+## Compatibility notes
+- This is a **Forge mod**. It is **not** a Spigot/Bukkit plugin.
+- If you run a Forge server, all players joining must have the mod installed (unless a specific version explicitly states otherwise).
 
-# How to Use (Players)
-- After Death
-- You respawn as a ghost (glow outline + night vision).
-- Follow the action bar/boss bar to your corpse or the nearest Spirit Healer.
-- Random whispers remind you what to do.
-
-# Reviving
-- At Corpse: Walk within 10 blocks of your death spot, then left or right click anywhere.
-- At Healer: Right-click the Spirit Healer. Costs may apply (see server rules).
-- Items/XP can be restored at revive if the server enabled those options.
-
-# Admin Tips
-- Place healers at cemeteries or hubs; roaming is automatically leashed to the center.
-- Use repel fields to keep hostile mobs from spawn hubs.
-- If clients don’t receive the resource-pack prompt, see messages.packHint* guidance and confirm publicHost points to an address reachable by players.
-
-# Building From Source
-- Maven
-- mvn clean package
-- Requires Java 8; depends on spigot-api 1.12.2-R0.1-SNAPSHOT and optional VaultAPI 1.7 (scope provided).
-
-# Known Limitations
-- Designed specifically for 1.12.2; relies on older Bukkit API names (e.g., Material constants, no BlockData).
-- CatServer/Forge mod blocks are matched by material name heuristics; not all mod gravestones will be detected.
-
-# License
-- MIT
-
-#Credits
-- Author: Luc Bellefeuille
-
-Thanks to the Bukkit/Spigot and Vault communities.
+---
